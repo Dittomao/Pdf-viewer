@@ -1,44 +1,32 @@
-// Get references to the DOM elements
-const urlInput = document.getElementById('pdf-url');
-const canvas = document.getElementById('pdf-viewer');
-const ctx = canvas.getContext('2d');
+// URL of the PDF to display
+const url = 'https://example.com/your-pdf-file.pdf'; // Replace with the URL of your PDF file
 
-async function loadPDF() {
-    // Clear previous canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+// The PDF.js library requires a specific worker script
+const pdfjsLib = window['pdfjs-dist/build/pdf'];
 
-            // Get PDF URL from the input field
-                const url = urlInput.value;
+// Asynchronous download of PDF
+pdfjsLib.getDocument(url).promise.then(pdf => {
+    // Fetch the first page
+        pdf.getPage(1).then(page => {
+                const scale = 1.5;
+                        const viewport = page.getViewport({ scale: scale });
 
-                    if (!url) {
-                            alert('Please enter a PDF URL.');
-                                    return;
-                                        }
+                                // Prepare canvas using PDF page dimensions
+                                        const canvas = document.createElement('canvas');
+                                                const context = canvas.getContext('2d');
+                                                        canvas.height = viewport.height;
+                                                                canvas.width = viewport.width;
 
-                                            try {
-                                                    // Load the PDF document
-                                                            const loadingTask = pdfjsLib.getDocument(url);
-                                                                    const pdf = await loadingTask.promise;
+                                                                        document.getElementById('pdf-viewer').appendChild(canvas);
 
-                                                                            // Fetch the first page
-                                                                                    const pageNumber = 1;
-                                                                                            const page = await pdf.getPage(pageNumber);
-
-                                                                                                    // Prepare canvas using PDF page dimensions
-                                                                                                            const viewport = page.getViewport({ scale: 1 });
-                                                                                                                    canvas.width = viewport.width;
-                                                                                                                            canvas.height = viewport.height;
-
-                                                                                                                                    // Render PDF page into the canvas context
-                                                                                                                                            const renderContext = {
-                                                                                                                                                        canvasContext: ctx,
-                                                                                                                                                                    viewport: viewport
-                                                                                                                                                                            };
-                                                                                                                                                                                    await page.render(renderContext).promise;
-
-                                                                                                                                                                                        } catch (error) {
-                                                                                                                                                                                                console.error('Error loading PDF:', error);
-                                                                                                                                                                                                        alert('Failed to load PDF. Check the console for details.');
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                            
+                                                                                // Render PDF page into canvas context
+                                                                                        const renderContext = {
+                                                                                                    canvasContext: context,
+                                                                                                                viewport: viewport
+                                                                                                                        };
+                                                                                                                                page.render(renderContext);
+                                                                                                                                    });
+                                                                                                                                    }).catch(error => {
+                                                                                                                                        console.error('Error loading PDF:', error);
+                                                                                                                                        });
+                                                                                                                                        

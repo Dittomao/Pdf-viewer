@@ -7,18 +7,19 @@
                 <style>
                         #pdf-viewer {
                                     width: 100%;
-                                                height: 600px;
-                                                            border: 1px solid #ccc;
+                                                height: 100vh;
+                                                            overflow: auto;
                                                                     }
-                                                                        </style>
-                                                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.18.0/pdf.min.js"></script>
-                                                                            </head>
-                                                                            <body>
-                                                                                <h1>PDF Viewer</h1>
-                                                                                    <input type="text" id="pdf-url" placeholder="Enter PDF URL here">
-                                                                                        <button onclick="loadPDF()">Load PDF</button>
-                                                                                            <canvas id="pdf-viewer"></canvas>
-                                                                                                <script src="script.js"></script>
-                                                                                                </body>
-                                                                                                </html>
-                                                                                                
+                                                                            canvas {
+                                                                                        display: block;
+                                                                                                    margin: 0 auto;
+                                                                                                            }
+                                                                                                                </style>
+                                                                                                                </head>
+                                                                                                                <body>
+                                                                                                                    <div id="pdf-viewer"></div>
+                                                                                                                        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.8.162/pdf.min.js"></script>
+                                                                                                                            <script src="script.js"></script>
+                                                                                                                            </body>
+                                                                                                                            </html>
+                                                                                                                            
